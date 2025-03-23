@@ -1,7 +1,7 @@
 {
     "name": "LiveTag NFT #2",
     "description": "Эксклюзивный NFT LiveTag с уникальным изображением.",
-    "image": "https://livetag2025.github.io/nft/images/livetag_nft.png",
+    "image": "https://github.com/Livetag2025/nft/blob/main/images/lft.png",
     "attributes": [
         {
             "trait_type": "Скидка",
