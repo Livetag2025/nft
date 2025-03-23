@@ -22,6 +22,9 @@ contract LIvetagNFT is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     function _baseURI() internal pure override returns (string memory) {
         return "https://livetag2025.github.io/nft/metadata/1.json";
     }
+    function setTokenURI(uint256 tokenId, string memory uri) public onlyOwner {
+    _setTokenURI(tokenId, uri);
+    }
 
     function safeMint(address to, string memory uri)
         public
