@@ -9,21 +9,47 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ERC721Burnable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /// @custom:security-contact bookland.commerce@gmail.com
 contract LIvetagNFT is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     uint256 private _nextTokenId;
+    address public liveTagToken; // Адрес вашего токена LiveTag
+    uint256 public nftPrice; // Цена в токенах LiveTag
 
-    constructor(address initialOwner)
+    constructor(address _liveTagToken, uint256 _nftPrice, address initialOwner)
         ERC721("LIvetagNFT", "LFT")
         Ownable(initialOwner)
-    {}
+    {
+        liveTagToken = _liveTagToken;
+        nftPrice = _nftPrice;
+    }
 
     function _baseURI() internal pure override returns (string memory) {
         return "https://livetag2025.github.io/nft/metadata/1.json";
     }
+
     function setTokenURI(uint256 tokenId, string memory uri) public onlyOwner {
-    _setTokenURI(tokenId, uri);
+        _setTokenURI(tokenId, uri);
+    }
+
+    /**
+     * @dev Позволяет владельцу контракта изменить цену на NFT.
+     */
+    function setPrice(uint256 _nftPrice) external onlyOwner {
+        nftPrice = _nftPrice;
+    }
+
+    /**
+     * @dev Позволяет любому пользователю купить NFT за токены LiveTag.
+     */
+    function purchaseNFT(address to, string memory uri) public returns (uint256) {
+        require(IERC20(liveTagToken).transferFrom(msg.sender, owner(), nftPrice), "Payment failed");
+
+        uint256 tokenId = _nextTokenId++;
+        _safeMint(to, tokenId);
+        _setTokenURI(tokenId, uri);
+        return tokenId;
     }
 
     function safeMint(address to, string memory uri)
