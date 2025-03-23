@@ -1,10 +1,10 @@
-// SPDX-License-Identifier: MIT
 
-// Compatible with OpenZeppelin Contracts ^5.0.0
+// File: @openzeppelin/contracts/utils/introspection/IERC165.sol
 
+
+// OpenZeppelin Contracts (last updated v5.1.0) (utils/introspection/IERC165.sol)
 
 pragma solidity ^0.8.22;
-
 
 /**
  * @dev Interface of the ERC-165 standard, as defined in the
@@ -55,7 +55,7 @@ interface IERC721 is IERC165 {
     event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
 
     /**
-     * @dev Returns the number of tokens in ``owner``'s account.  
+     * @dev Returns the number of tokens in ``owner``'s account.
      */
     function balanceOf(address owner) external view returns (uint256 balance);
 
@@ -169,7 +169,7 @@ interface IERC721 is IERC165 {
 
 // OpenZeppelin Contracts (last updated v5.0.0) (token/ERC721/extensions/IERC721Metadata.sol)
 
-pragma solidity ^0.8.2;
+pragma solidity ^0.8.22;
 
 
 /**
@@ -3713,12 +3713,8 @@ pragma solidity ^0.8.22;
 /// @custom:security-contact bookland.commerce@gmail.com
 contract LIvetagNFT is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     uint256 private _nextTokenId;
-    
-    /**
-    * 🔴 New variables for handling LiveTag token payments
-    */
     address public liveTagToken; // Адрес вашего токена LiveTag
-    uint256 public nftPrice; // Цена NFT в LiveTag токенах
+    uint256 public nftPrice; // Цена в токенах LiveTag
 
     constructor(address _liveTagToken, uint256 _nftPrice, address initialOwner)
         ERC721("LIvetagNFT", "LFT")
@@ -3737,15 +3733,15 @@ contract LIvetagNFT is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     }
 
     /**
-    * 🔴 Function to set the NFT price in LiveTag tokens
-    */
+     * @dev Позволяет владельцу контракта изменить цену на NFT.
+     */
     function setPrice(uint256 _nftPrice) external onlyOwner {
         nftPrice = _nftPrice;
     }
 
     /**
-    * 🔴 Function to purchase NFT using LiveTag tokens
-    */
+     * @dev Позволяет любому пользователю купить NFT за токены LiveTag.
+     */
     function purchaseNFT(address to, string memory uri) public returns (uint256) {
         require(IERC20(liveTagToken).transferFrom(msg.sender, owner(), nftPrice), "Payment failed");
 
